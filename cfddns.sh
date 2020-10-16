@@ -39,7 +39,7 @@ done
 shift $((OPTIND - 1))
 
 [ $# -ne 2 ] && usage && bail 1
-[ -z "$CLOUDFLARE_TOKEN" ] && bail 1 '$CLOUDFLARE_TOKEN not set'
+[ -z "$CLOUDFLARE_TOKEN" ] && bail 1 "\$CLOUDFLARE_TOKEN not set"
 
 readonly API_URL="https://api.cloudflare.com/client/v4"
 readonly ZONE_NAME="$1"
@@ -68,7 +68,7 @@ query() {
     ) || return $?
 
     # Display error messages returned by api
-    if [ $(echo "$q" | jq .success) != true ]; then
+    if [ "$(echo "$q" | jq .success)" != true ]; then
         echo "$q" | jq '.errors | .[] | .message' | tr -d \" >&2
         return 1
     fi
@@ -118,7 +118,7 @@ update() {
             "content":"%s",
             "ttl":%s,
             "proxied":%s
-        }' "$RECORD_NAME" $(ipv4) $ttl $proxy
+        }' "$RECORD_NAME" "$(ipv4)" "$ttl" "$proxy"
     )
 
     # Memoize both values and handle errors
